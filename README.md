@@ -86,9 +86,13 @@ https://github.com/Jurij-Ivastsuk/WAXAR-shim-review/tree/waxar-shim-x86_64-aarch
 ### What patches are being applied and why:
 *******************************************************************************
 530.patch (Enable-the-NX-compatibility-flag-by-default)
+
 531.patch (Add-validation-function-for-Microsoft-signing)
+
 535.patch (Make-sbat_var.S-parse-right-with-buggy-gcc-binutils)
+
 626.patch (Improving the robustness of value retention for the variable second_stage)
+
 According to our analysis of the error-situation and our own improvement, 
 patch 626 protects against unprintable ascii characters in the variable second_stage. 
 Please see our PR (https://github.com/rhboot/shim/pull/626).
