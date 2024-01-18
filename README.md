@@ -225,8 +225,8 @@ N/A
 ### What is the SHA256 hash of your final SHIM binary?
 *******************************************************************************
 SHA256 (shimx64.efi): 0f307475a1a1cc5d0cd2e41cfe591851521d182fa6098a4d0669e431072dd89e
-SHA256 (shimaa64.efi): d8783372a31ff3557b631327ad41c48e94ec78fbccf5071cc96c6d6ba5fe5742
 
+SHA256 (shimaa64.efi): d8783372a31ff3557b631327ad41c48e94ec78fbccf5071cc96c6d6ba5fe5742
 *******************************************************************************
 ### How do you manage and protect the keys used in your SHIM?
 *******************************************************************************
