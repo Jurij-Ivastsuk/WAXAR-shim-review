@@ -189,17 +189,26 @@ N/A
 ### What OS and toolchain must we use to reproduce this build?  Include where to find it, etc.  We're going to try to reproduce your build as closely as possible to verify that it's really a build of the source tree you tell us it is, so these need to be fairly thorough. At the very least include the specific versions of gcc, binutils, and gnu-efi which were used, and where to find those binaries.
 ### If the shim binaries can't be reproduced using the provided Dockerfile, please explain why that's the case and what the differences would be.
 *******************************************************************************
-Please, first use the Dockerfile: 
-docker build -t shim-15-7 . 2>&1 | tee build.log
+Please, first use the Dockerfile: docker build -t shim-15-7 . 2>&1 | tee build.log
+
 If the build cannot be reproduced please do the following steps:
+
 We use the Linux-OS: debian:bookworm
+
 apt-get -y -q update
+
 apt-get -y -q install gcc make gcc-aarch64-linux-gnu git
+
 git clone --recursive -b 15.7 https://github.com/rhboot/shim.git shim-15.7
+
 apply all patches from the Patches-dir
+
 modify the sbat.csv file:
+
 cat waxar_sbat.csv >> /shim-15.7/data/sbat.csv
+
 cd shim-15.7
+
 make VENDOR_CERT_FILE=../waxar.cer LIBDIR=/usr/lib
 *******************************************************************************
 ### Which files in this repo are the logs for your build?
