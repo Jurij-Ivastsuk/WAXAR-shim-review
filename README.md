@@ -85,10 +85,6 @@ https://github.com/Jurij-Ivastsuk/WAXAR-shim-review/tree/waxar-shim-x86_64-aarch
 *******************************************************************************
 ### What patches are being applied and why:
 *******************************************************************************
-530.patch (Enable-the-NX-compatibility-flag-by-default)
-
-531.patch (Add-validation-function-for-Microsoft-signing)
-
 535.patch (Make-sbat_var.S-parse-right-with-buggy-gcc-binutils)
 
 626.patch (Improving the robustness of value retention for the variable second_stage)
@@ -228,9 +224,9 @@ N/A
 *******************************************************************************
 ### What is the SHA256 hash of your final SHIM binary?
 *******************************************************************************
-SHA256 (shimx64.efi): 0f307475a1a1cc5d0cd2e41cfe591851521d182fa6098a4d0669e431072dd89e
+SHA256 (shimx64.efi): 21e11f8a78d2db82829ef6c46d10f9e92c6484e4295da2cdbcad2a45fc2f8fb7
 
-SHA256 (shimaa64.efi): d8783372a31ff3557b631327ad41c48e94ec78fbccf5071cc96c6d6ba5fe5742
+SHA256 (shimaa64.efi): 1f6332501e4c64246b76a4d9c4a589927b099d0b70d271a345626912a4e220f1
 *******************************************************************************
 ### How do you manage and protect the keys used in your SHIM?
 *******************************************************************************
