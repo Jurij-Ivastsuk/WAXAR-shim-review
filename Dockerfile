@@ -7,18 +7,16 @@ RUN apt-get -y -q install gcc make gcc-aarch64-linux-gnu git
 
 # clone shim
 WORKDIR /build
-RUN git clone --recursive -b 15.7 https://github.com/rhboot/shim.git shim-15.7
-WORKDIR /build/shim-15.7
+RUN git clone --recursive -b 15.8 https://github.com/rhboot/shim.git shim-15.8
+WORKDIR /build/shim-15.8
 
 # copy patch files to workdir
-ADD Patches/535.patch .
 ADD Patches/626.patch .
 
 RUN git config user.email "jurij.ivastsuk@waxar.eu"
 RUN git config user.name "Jurij Ivastsuk-Kienbaum"
 
 # apply Patch
-RUN git am 535.patch
 RUN git am 626.patch
 
 # include certificate and custom sbat

@@ -69,13 +69,13 @@ like keyserver.ubuntu.com, and preferably have signatures that are reasonably
 well known in the Linux community.)
 
 *******************************************************************************
-### Were these binaries created from the 15.7 shim release tar?
-Please create your shim binaries starting with the 15.7 shim release tar file: https://github.com/rhboot/shim/releases/download/15.7/shim-15.7.tar.bz2
+### Were these binaries created from the 15.8 shim release tar?
+Please create your shim binaries starting with the 15.8 shim release tar file: https://github.com/rhboot/shim/releases/download/15.8/shim-15.8.tar.bz2
 
-This matches https://github.com/rhboot/shim/releases/tree/15.7 and contains the appropriate gnu-efi source.
+This matches https://github.com/rhboot/shim/releases/tree/15.8 and contains the appropriate gnu-efi source.
 
 *******************************************************************************
-Yes, we created the shim binaries from the 15.7 shim release at https://github.com/rhboot/shim/releases/tag/15.7
+Yes, we created the shim binaries from the 15.8 shim release at https://github.com/rhboot/shim/releases/tag/15.8
 
 *******************************************************************************
 ### URL for a repo that contains the exact code which was built to get this binary:
@@ -85,8 +85,6 @@ https://github.com/Jurij-Ivastsuk/WAXAR-shim-review/tree/waxar-shim-x86_64-aarch
 *******************************************************************************
 ### What patches are being applied and why:
 *******************************************************************************
-535.patch (Make-sbat_var.S-parse-right-with-buggy-gcc-binutils)
-
 626.patch (Improving the robustness of value retention for the variable second_stage)
 
 According to our analysis of the error-situation and our own improvement, 
@@ -189,7 +187,7 @@ N/A
 ### What OS and toolchain must we use to reproduce this build?  Include where to find it, etc.  We're going to try to reproduce your build as closely as possible to verify that it's really a build of the source tree you tell us it is, so these need to be fairly thorough. At the very least include the specific versions of gcc, binutils, and gnu-efi which were used, and where to find those binaries.
 ### If the shim binaries can't be reproduced using the provided Dockerfile, please explain why that's the case and what the differences would be.
 *******************************************************************************
-Please, first use the Dockerfile: docker build -t shim-15-7 . 2>&1 | tee build.log
+Please, first use the Dockerfile: docker build -t shim-15-8 . 2>&1 | tee build.log
 
 If the build cannot be reproduced please do the following steps:
 
@@ -199,15 +197,15 @@ apt-get -y -q update
 
 apt-get -y -q install gcc make gcc-aarch64-linux-gnu git
 
-git clone --recursive -b 15.7 https://github.com/rhboot/shim.git shim-15.7
+git clone --recursive -b 15.8 https://github.com/rhboot/shim.git shim-15.8
 
 apply all patches from the Patches-dir
 
 modify the sbat.csv file:
 
-cat waxar_sbat.csv >> /shim-15.7/data/sbat.csv
+cat waxar_sbat.csv >> /shim-15.8/data/sbat.csv
 
-cd shim-15.7
+cd shim-15.8
 
 make VENDOR_CERT_FILE=../waxar.cer LIBDIR=/usr/lib
 *******************************************************************************
@@ -224,9 +222,9 @@ N/A
 *******************************************************************************
 ### What is the SHA256 hash of your final SHIM binary?
 *******************************************************************************
-SHA256 (shimx64.efi): 21e11f8a78d2db82829ef6c46d10f9e92c6484e4295da2cdbcad2a45fc2f8fb7
+SHA256 (shimx64.efi): a23265bee9ddadfc955f99b09101a76329bd305a125e441565b2504512501467
 
-SHA256 (shimaa64.efi): 1f6332501e4c64246b76a4d9c4a589927b099d0b70d271a345626912a4e220f1
+SHA256 (shimaa64.efi): 8d6ff4f89b7553e6c69ee4cfdc8f52055ccec1c0e094cb1edd412ac6948e0b76
 *******************************************************************************
 ### How do you manage and protect the keys used in your SHIM?
 *******************************************************************************
@@ -247,7 +245,7 @@ More information on how SBAT works can be found [here](https://github.com/rhboot
 *******************************************************************************
 sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SBAT.md
 shim,3,UEFI shim,shim,1,https://github.com/rhboot/shim
-shim.waxar,1,Waxar GmbH & Co.KG,shim,15.7,https://www.waxar.eu
+shim.waxar,1,Waxar GmbH & Co.KG,shim,15.8,https://www.waxar.eu
 
 We use upstreams distro from Canonical for grub since we are not rebuilding it.
 
