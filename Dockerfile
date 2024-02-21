@@ -20,7 +20,7 @@ RUN git config user.name "Jurij Ivastsuk-Kienbaum"
 RUN git am 626.patch
 
 # include certificate and custom sbat
-ADD waxar.cer .
+ADD waxar.der .
 ADD waxar_sbat.csv .
 
 # add custom data to the original sbat.csv
@@ -31,10 +31,10 @@ RUN mkdir build-x86_64
 RUN mkdir build-aarch64
 
 # Build x86_64
-RUN make -C build-x86_64 ARCH=x86_64 VENDOR_CERT_FILE=../waxar.cer TOPDIR=.. -f ../Makefile
+RUN make -C build-x86_64 ARCH=x86_64 VENDOR_CERT_FILE=../waxar.der TOPDIR=.. -f ../Makefile
 
 # Build aarch64
-RUN make -C build-aarch64 ARCH=aarch64 CROSS_COMPILE=aarch64-linux-gnu- VENDOR_CERT_FILE=../waxar.cer TOPDIR=.. -f ../Makefile
+RUN make -C build-aarch64 ARCH=aarch64 CROSS_COMPILE=aarch64-linux-gnu- VENDOR_CERT_FILE=../waxar.der TOPDIR=.. -f ../Makefile
 
 # Print the SHA256 of the shims.
 RUN sha256sum build-x86_64/shimx64.efi
