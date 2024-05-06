@@ -1,0 +1,25 @@
+The kernel module signing facility cryptographically signs modules during installation and then checks the signature upon loading the module.  This allows increased kernel security by disallowing the loading of unsigned modules or modules signed with an invalid key.
+
+With this setup we have realized the goal that all modules can be signed while the kernel is being built:
+
+1. The module signing facility is enabled by setting the parameter: CONFIG_MODULE_SIG=y (see config file)
+Furthermore, we aktivate the parameter: CONFIG_MODULE_SIG_FORCE=y
+This specifies how the kernel should deal with a module that has a signature for which the key is not known or a module that is unsigned.
+If this is on (ie. "restrictive"), only modules that have a valid signature that can be verified by a public key in the kernel's possession will be loaded.
+
+Next, we activate the parameter: CONFIG_MODULE_SIG_ALL=y (see config file)
+If this is on then modules will be automatically signed during the modules_install phase of a build.
+
+Next, we set the parameter: CONFIG_MODULE_SIG_KEY="certs/signing_key.pem" (see config file).
+The string provides the path to a file containing both a private key and its corresponding X.509 certificate in PEM form.
+For security reasons, these files are not included in current Sources (linux-source-515.tar.gz). 
+
+2. We have designed the compilation and build process in such a way that a Debian package is created at the end so that we can install it in our Linux environment without any problems.
+We achieve this through:
+make -j6 deb-pkg LOCALVERSION=-devimg-waxar KDEB_PKGVERSION=$(make kernelversion)-2
+
+3. After the compilation, building and signing of the modules is finished, the Debian package file is created:
+linux-image-5.15.1-devimg-waxar_5.15.1-2_amd64.deb
+After the installation of this Debian package we get the kernel and the signed modules. 
+Afterwards we also sign the kernel with our own certificate.
+
