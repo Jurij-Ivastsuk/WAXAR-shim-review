@@ -80,16 +80,12 @@ Yes, we created the shim binaries from the 15.8 shim release at https://github.c
 *******************************************************************************
 ### URL for a repo that contains the exact code which was built to get this binary:
 *******************************************************************************
-https://github.com/Jurij-Ivastsuk/WAXAR-shim-review/tree/waxar-shim-x86_64-aarch64-20240115
+hhttps://github.com/Jurij-Ivastsuk/WAXAR-shim-review/tree/waxar-shim-x86_64-aarch64-20240531
 
 *******************************************************************************
 ### What patches are being applied and why:
 *******************************************************************************
-626.patch (Improving the robustness of value retention for the variable second_stage)
-
-According to our analysis of the error-situation and our own improvement, 
-patch 626 protects against unprintable ascii characters in the variable second_stage. 
-Please see our PR (https://github.com/rhboot/shim/pull/626).
+N/A
 
 *******************************************************************************
 ### If shim is loading GRUB2 bootloader what exact implementation of Secureboot in GRUB2 do you have? (Either Upstream GRUB2 shim_lock verifier or Downstream RHEL/Fedora/Debian/Canonical-like implementation)
@@ -199,15 +195,13 @@ apt-get -y -q install gcc make gcc-aarch64-linux-gnu git
 
 git clone --recursive -b 15.8 https://github.com/rhboot/shim.git shim-15.8
 
-apply all patches from the Patches-dir
-
 modify the sbat.csv file:
 
 cat waxar_sbat.csv >> /shim-15.8/data/sbat.csv
 
 cd shim-15.8
 
-make VENDOR_CERT_FILE=../waxar.cer LIBDIR=/usr/lib
+make VENDOR_CERT_FILE=../waxar.cer LIBDIR=/usr/lib DISABLE_REMOVABLE_LOAD_OPTIONS=y
 *******************************************************************************
 ### Which files in this repo are the logs for your build?
 This should include logs for creating the buildroots, applying patches, doing the build, creating the archives, etc.
@@ -222,9 +216,9 @@ N/A
 *******************************************************************************
 ### What is the SHA256 hash of your final SHIM binary?
 *******************************************************************************
-SHA256 (shimx64.efi): 64701ac022525c166ed29fb87dad6ea37363fe7d22635e5d26c02956ed927a86
+SHA256 (shimx64.efi): 1894c7e467991c117162e1e40dd61ed85a5f790a68216fdbee93b2619b70df67
 
-SHA256 (shimaa64.efi): 40169f13ca043e54b2a16e9847a6d11407af83b97ce99f0738eecfebf5501da0
+SHA256 (shimaa64.efi): 5c7238473401d791c7f376efee90cf1e9fe23e2bf1814f4795474d57920bdfbf
 *******************************************************************************
 ### How do you manage and protect the keys used in your SHIM?
 *******************************************************************************
