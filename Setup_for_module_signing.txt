@@ -51,26 +51,9 @@ linux-image-5.15.1-devimg-waxar_5.15.1-2_amd64.deb
 
 After installing this Debian package we can access the kernel and the signed modules. Please note the following: the modules are signed with a kernel-specific certificate that is only valid for the current compilation. The public-key for verification of this certificate is integrated in the kernel. This ensures that after loading the kernel, only modules signed with the corresponding certificate can be loaded. Modules that have no certificate or an invalid certificate are ignored and not loaded.
 
-Signing Kernel and Modules with our CA-Certificate
+Signing Kernel with our CA-Certificate
  
 Step 1: Signing the linux kernel with our CA-Certificate using HSM
 In order for the linux kernel to be recognized and loaded as trustworthy by Shim, we sign our linux kernel with our CA certificate, whereby the private key is located in the HSM:
 openssl dgst -sha256 -engine pkcs11 -keyform engine -sign "pkcs11:token=our_token;object=our_key_label" -out vmlinuz.signed vmlinuz
-
-Step 2: Additionally signing all modules with our CA-Certificate using HSM
-To be sure that modules from older kernels or unwanted modules cannot be loaded, we have used the strategy of double signing of all modules. On the one hand with the unique kernel certificate and on the other hand with our CA certificate. Taking into account that our CA certificate is located in the HSM, this gives us a high level of security in terms of preventing the possibility of infiltration of foreign and unknown modules into the boot process.
-
-To sign all modules with our CA certificate, we use "sign_all_modules" script with previously mentioned modified "sign-file" script, which uses HSM, with the correspondingly adjusted <key-id>:
--------------sign_all_modules--------------BEGIN
-#!/bin/bash
-
-ModulesDir=/path/to/modules
-SignFileDir=/usr/src/linux/scripts
-
-for modfile in $(find $ModulesDir -type f -name *.ko); do
-	echo "Signing $modfile"
-		# sign each module file
-	$SignFileDir/sign-file sha256 nofile nofile $modfile
-done
--------------sign_all_modules--------------END
 
