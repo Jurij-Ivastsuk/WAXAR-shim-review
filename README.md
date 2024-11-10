@@ -238,7 +238,7 @@ preserve the SBAT entry from those distributions and only append your own.
 More information on how SBAT works can be found [here](https://github.com/rhboot/shim/blob/main/SBAT.md).
 *******************************************************************************
 sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SBAT.md
-shim,3,UEFI shim,shim,1,https://github.com/rhboot/shim
+shim,4,UEFI shim,shim,1,https://github.com/rhboot/shim
 shim.waxar,1,Waxar GmbH & Co.KG,shim,15.8,https://www.waxar.eu
 
 We use upstreams distro from Canonical for grub since we are not rebuilding it.
