@@ -326,6 +326,20 @@ No
 *******************************************************************************
 Kernel version of Debian 5.15.1
 
+Debian's 5.15.1 kernel includes several patches and features to enforce Secure Boot functionality:
+1. Key Secure Boot Features
+	Shim bootloader: Debian uses a small UEFI bootloader called "shim" that is signed by Microsoft. This allows Debian to sign its own binaries without requiring additional Microsoft signatures
+	Debian signing keys: The kernel embeds Debian's own signing keys, which are used to verify the authenticity of Debian-provided UEFI programs and kernels
+	Machine Owner Key (MOK) support: The kernel supports using a Machine Owner Key for signing custom kernels and modules to work with Secure Boot
+2. Specific Patches and Enhancements
+	X.509 certificate loading: The kernel loads compiled-in X.509 certificates to verify signatures
+	UEFI key variable checking: The kernel checks for keys in UEFI variables like DB and MokListRT when Secure Boot is enabled
+	DKMS module signing: Support for signing Dynamic Kernel Module System (DKMS) modules using a Machine Owner Key
+	Initramfs updates: Patches to ensure the initramfs is properly updated when signing new modules
+3. Verification Mechanisms
+	Module signature verification: The kernel verifies signatures on loadable kernel modules before allowing them to be loaded
+	EFI binary verification: Tools like sbverify are included to check signatures on EFI binaries
+
 *******************************************************************************
 ### Add any additional information you think we may need to validate this shim.
 *******************************************************************************
