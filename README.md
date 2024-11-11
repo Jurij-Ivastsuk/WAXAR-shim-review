@@ -306,7 +306,16 @@ N/A
 *******************************************************************************
 ### How do the launched components prevent execution of unauthenticated code?
 *******************************************************************************
-N/A
+GRUB2 employs several mechanisms to prevent the execution of unauthenticated code when launching components in a secure boot environment:
+1. Signature Verification: GRUB2 verifies digital signatures on components it loads, such as kernels, using the shim framework. This ensures only properly signed and authenticated code is executed.
+2. Secure Boot Chain: GRUB2 is part of a secure boot chain that starts with UEFI Secure Boot and continues through shim, GRUB2, and the kernel. Each component verifies the next before handing off control.
+3. Lockdown Mechanisms: GRUB2 implements lockdown features that restrict certain operations when secure boot is enabled, preventing unauthorized modifications to the boot process.
+4. Restricted Boot Options: In secure boot mode, GRUB2 limits available boot options to only those that are signed and authenticated.
+5. Configuration File Protection: The GRUB2 configuration file (/boot/grub/grub.cfg) is protected with restrictive permissions to prevent unauthorized modifications.
+6. Module Restrictions: GRUB2 either uses the shim framework to verify modules or disables modules entirely when secure boot is enabled.
+7. Kernel Verification: For Linux kernels specifically, GRUB2 verifies the kernel signature before loading it.
+8. No Unsigned Kernel Loading: In secure boot mode, GRUB2 is configured to not load unsigned kernels.
+These mechanisms work together to create a robust system that prevents the execution of unauthenticated code during the boot process when secure boot is enabled.
 
 *******************************************************************************
 ### Does your SHIM load any loaders that support loading unsigned kernels (e.g. GRUB2)?
