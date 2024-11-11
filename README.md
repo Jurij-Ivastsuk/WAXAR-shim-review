@@ -253,7 +253,40 @@ grub.waxar,1,Waxar GmbH & Co.KG,grub2,2.12~rc1-10ubuntu4,https://www.waxar.eu
 *******************************************************************************
 ### Which modules are built into your signed GRUB2 image?
 *******************************************************************************
-N/A
+Ubuntu's GRUB 2 version 2.12~rc1-10ubuntu4 includes the following modules built into its signed GRUB EFI binary (grubx64.efi):
+1. Core modules required for basic functionality
+2. Filesystem modules to read various filesystems containing kernel and initramfs images
+3. The lvm module for Logical Volume Management support
+The modules are embedded directly in the EFI binary to comply with Secure Boot requirements.
+
+Here's a list of some of the key modules:
+1. UEFI modules:
+	Modules for ARM systems with UEFI
+	Modules for ARM64 (AArch64) systems with UEFI
+	Modules for IA32 (32-bit x86) systems with UEFI
+	Modules for AMD64 (64-bit x86) systems with UEFI
+	Modules for RISC-V 64-bit systems with UEFI
+2. BIOS modules:
+	Modules for traditional BIOS systems
+3. Other architecture-specific modules:
+	Modules for Coreboot firmware
+4. Filesystem modules:
+	ext2/ext3/ext4
+	FAT12/FAT16/FAT32
+	exFAT
+	BtrFS (including RAID0, RAID1, RAID10, gzip and lzo compression)
+	ISO9660 (including Joliet and Rock-ridge extensions)
+	NTFS (including compression)
+	HFS and HFS+
+	UFS and UFS2
+5. Compression modules:
+	Support for reading compressed files
+6. Network modules:
+	Support for network booting
+7. Multiboot modules:
+	Support for loading multiple modules as specified in the Multiboot standard
+8. Environment modules:
+	Support for saving and loading environment variables
 
 *******************************************************************************
 ### What is the origin and full version number of your bootloader (GRUB2 or other)?
