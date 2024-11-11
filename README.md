@@ -80,7 +80,7 @@ Yes, we created the shim binaries from the 15.8 shim release at https://github.c
 *******************************************************************************
 ### URL for a repo that contains the exact code which was built to get this binary:
 *******************************************************************************
-hhttps://github.com/Jurij-Ivastsuk/WAXAR-shim-review/tree/waxar-shim-x86_64-aarch64-20240531
+https://github.com/Jurij-Ivastsuk/WAXAR-shim-review/tree/waxar-shim-x86_64-aarch64-20241111
 
 *******************************************************************************
 ### What patches are being applied and why:
