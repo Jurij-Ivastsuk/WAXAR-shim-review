@@ -1,0 +1,40 @@
+# start docker with debian bullseye
+docker run -it debian:bullseye /bin/bash
+
+# install al needed packages
+apt-get update
+apt-get install softhsm2 opensc openssl libengine-pkcs11-openssl gnutls-bin
+
+# make preparations for using softhsm
+mkdir -p $HOME/.config/softhsm2/tokens
+echo "directories.tokendir = $HOME/.config/softhsm2/tokens" > $HOME/.config/softhsm2/softhsm2.conf
+
+# initialize token
+softhsm2-util --init-token --label HSM --so-pin Secret.123 --pin Secret.123 --free
+
+# generate keys
+pkcs11-tool --module /usr/lib/softhsm/libsofthsm2.so --login --pin Secret.123 --keypairgen --key-type rsa:2048 --id 01 --label "kernel_signing_key"
+
+# export the public key and Convert it to the required format PEM, the kernel typically requires the public key of x.509 Standard which will be stored in PEM certificate format
+openssl rsa -pubin -inform DER -in <(pkcs11-tool --module /usr/lib/softhsm/libsofthsm2.so --login --pin Secret.123 --read-object --id 01 --type pubkey) -outform PEM -out signing_key.pem
+
+# test the part which is used for signing modules
+# create the test file
+echo "data to sign (max 100 bytes)" > tst_module
+
+# sign the test module file
+pkcs11-tool --id 01 -s -p Secret.123 -m RSA-PKCS --module /usr/lib/x86_64-linux-gnu/softhsm/libsofthsm2.so --input-file tst_module --output-file  tst_module.sig
+
+# test the kernel signing
+# create the test file:
+echo "data to sign (max 100 bytes)" > tst_kernel
+
+# sign kernel
+# the general form: openssl dgst -sha256 -engine pkcs11 -keyform engine -sign "URI_for_initialized_token" -out tst_kernel.signed tst_kernel
+
+# list all URI for all initialized tokens
+p11tool --list-token-urls
+
+# set the URI for our initialized token and sign the test kernel file, example:
+openssl dgst -sha256 -engine pkcs11 -keyform engine -sign "pkcs11:model=SoftHSM%20v2;manufacturer=SoftHSM%20project;serial=eeb08bd383053150;token=HSM" -out tst_kernel.signed tst_kernel
+Enter PKCS#11 token PIN for HSM: (Secret.123)
