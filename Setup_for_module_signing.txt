@@ -10,10 +10,10 @@ pkcs11-tool --module /path/to/hsm/library.so --login --pin <user-PIN> --keypairg
 Step 2: Confirm that the key pair was generated successfully:
 pkcs11-tool --module /path/to/hsm/library.so --login --pin <user-PIN> --list-objects
 
-Step 3: Export the public key and Convert it to the required format, the kernel typically requires the public key in X.509 certificate format:
-openssl req -new -x509 -key <(pkcs11-tool --module /path/to/hsm/library.so --login --pin <user-PIN> --read-object --id 01 --type pubkey) -out signing_key.x509 -days 3650
+Step 3: Export the public key and Convert it to the required format PEM, the kernel typically requires the public key of x.509 Standard which will be stored in PEM certificate format:
+openssl rsa -pubin -inform DER -in <(pkcs11-tool --module /path/to/hsm/library.so --login --pin <user-PIN> --read-object --id 01 --type pubkey) -outform PEM -out signing_key.pem
 
-Step 4: Copy signing_key.x509 to "certs" dir
+Step 4: Copy signing_key.pem to "certs" dir
 
 Step 5: Set the parameters: CONFIG_MODULE_SIG=y and CONFIG_MODULE_SIG_FORCE=y in config file.
 This specifies how the kernel should deal with a module that has a signature for which the key is not known or a module that is unsigned.
@@ -23,7 +23,7 @@ Step 6: Set the parameter: CONFIG_MODULE_SIG_ALL=y in config file.
 Modules will be automatically signed during the modules_install phase of a build.
 
 Step 7: set the parameter: CONFIG_MODULE_SIG_KEY="certs/signing_key.pem" in config file.
-The string provides the path to a directory containing X.509 crtificate (signing_key.x509) and virtually a private key. 
+The string provides the path to a directory containing X.509 certificate (signing_key.pem) and virtually a private key. 
 The private key is not physically located in this directory, it is rather extracted by the HSM during the execution of the sign-file script.
 
 Step 8: Modify the sign-file script in the kernel source to use the HSM for signing, 
@@ -37,7 +37,7 @@ CERT=$3
 MODULE=$4
 
 # Use pkcs11-tool to sign the module
-pkcs11-tool --module /usr/lib/opensc-pkcs11.so --sign --mechanism RSA-PKCS --input-file $MODULE --output-file $MODULE.sig --login --pin <our-pin> --key-id <key-id>
+pkcs11-tool --id <key-id> -s -p <user-PIN> -m RSA-PKCS --module /path/to/library.so --input-file $MODULE --output-file $MODULE.sig
 
 # Append the signature to the module
 cat $MODULE.sig >> $MODULE
@@ -49,11 +49,12 @@ make -j6 deb-pkg LOCALVERSION=-devimg-waxar KDEB_PKGVERSION=$(make kernelversion
 After the compilation, building and signing of the modules is finished, the Debian package file is created:
 linux-image-5.15.1-devimg-waxar_5.15.1-2_amd64.deb
 
-After installing this Debian package we can access the kernel and the signed modules. Please note the following: the modules are signed with a kernel-specific certificate that is only valid for the current compilation. The public-key for verification of this certificate is integrated in the kernel. This ensures that after loading the kernel, only modules signed with the corresponding certificate can be loaded. Modules that have no certificate or an invalid certificate are ignored and not loaded.
+After installing this Debian package we can access the kernel and the signed modules. Please note the following: the modules are signed with a kernel-specific certificate that is only valid for the current compilation. 
+The public-key for verification of this certificate is integrated in the kernel. This ensures that after loading the kernel, only modules signed with the corresponding certificate can be loaded. Modules that have no certificate or an invalid certificate are ignored and not loaded.
 
 Signing Kernel with our CA-Certificate
  
 Step 1: Signing the linux kernel with our CA-Certificate using HSM
 In order for the linux kernel to be recognized and loaded as trustworthy by Shim, we sign our linux kernel with our CA certificate, whereby the private key is located in the HSM:
-openssl dgst -sha256 -engine pkcs11 -keyform engine -sign "pkcs11:token=our_token;object=our_key_label" -out vmlinuz.signed vmlinuz
+openssl dgst -sha256 -engine pkcs11 -keyform engine -sign "URI_for_initialized_token" -out vmlinuz.signed vmlinuz
 

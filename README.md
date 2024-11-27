@@ -80,7 +80,7 @@ Yes, we created the shim binaries from the 15.8 shim release at https://github.c
 *******************************************************************************
 ### URL for a repo that contains the exact code which was built to get this binary:
 *******************************************************************************
-https://github.com/Jurij-Ivastsuk/WAXAR-shim-review/tree/waxar-shim-x86_64-aarch64-20241111
+https://github.com/rhboot/shim.git
 
 *******************************************************************************
 ### What patches are being applied and why:
@@ -90,7 +90,7 @@ N/A
 *******************************************************************************
 ### If shim is loading GRUB2 bootloader what exact implementation of Secureboot in GRUB2 do you have? (Either Upstream GRUB2 shim_lock verifier or Downstream RHEL/Fedora/Debian/Canonical-like implementation)
 *******************************************************************************
-Using downstream implementations from Canonical
+We are using downstream implementations from Canonical
 
 *******************************************************************************
 ### If shim is loading GRUB2 bootloader and your previously released shim booted a version of GRUB2 affected by any of the CVEs in the July 2020, the March 2021, the June 7th 2022, the November 15th 2022, or 3rd of October 2023 GRUB2 CVE list, have fixes for all these CVEs been applied?
@@ -165,7 +165,7 @@ No
 ### Do you use an ephemeral key for signing kernel modules?
 ### If not, please describe how you ensure that one kernel build does not load modules built for another kernel.
 *******************************************************************************
-We do not use an ephemeral key. We use a WAXAR HSM backed key for signing kernel modules.
+Yes, we use an ephemeral key. We use a WAXAR HSM backed (CA) key for signing kernel and HSM backed (leaf) key for signing modules
 
 *******************************************************************************
 ### If you use vendor_db functionality of providing multiple certificates and/or hashes please briefly describe your certificate setup.
@@ -201,7 +201,7 @@ cat waxar_sbat.csv >> /shim-15.8/data/sbat.csv
 
 cd shim-15.8
 
-make VENDOR_CERT_FILE=../waxar.cer LIBDIR=/usr/lib DISABLE_REMOVABLE_LOAD_OPTIONS=y
+make VENDOR_CERT_FILE=../waxar.der LIBDIR=/usr/lib DISABLE_REMOVABLE_LOAD_OPTIONS=y
 *******************************************************************************
 ### Which files in this repo are the logs for your build?
 This should include logs for creating the buildroots, applying patches, doing the build, creating the archives, etc.
@@ -242,52 +242,40 @@ shim,4,UEFI shim,shim,1,https://github.com/rhboot/shim
 shim.waxar,1,Waxar GmbH & Co.KG,shim,15.8,https://www.waxar.eu
 
 We use upstreams distro from Canonical for grub since we are not rebuilding it.
-
 The SBAT listing for GRUB2 from Canonical with the addition for waxar:
-sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SBAT.md.
-grub,4,Free Software Foundation,grub,2.12~rc1,https://www.gnu.org/software/grub/.
-grub.ubuntu,1,Ubuntu,grub2,2.12~rc1-10ubuntu4,https://www.ubuntu.com/.grub.
+
+sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SBAT.md
+grub,4,Free Software Foundation,grub,2.12~rc1,https://www.gnu.org/software/grub/
+grub.ubuntu,1,Ubuntu,grub2,2.12~rc1-10ubuntu4,https://www.ubuntu.com/.grub
 peimage,1,Canonical,grub2,2.12~rc1-10ubuntu4,https://salsa.debian.org/grub-team/grub/-/blob/master/debian/patches/secure-boot/efi-use-peimage-shim.patch
 grub.waxar,1,Waxar GmbH & Co.KG,grub2,2.12~rc1-10ubuntu4,https://www.waxar.eu
 
 *******************************************************************************
 ### Which modules are built into your signed GRUB2 image?
 *******************************************************************************
+We use upstreams distro from Canonical for grub since we are not rebuilding it and the list remains obviously the same.
 Ubuntu's GRUB 2 version 2.12~rc1-10ubuntu4 includes the following modules built into its signed GRUB EFI binary (grubx64.efi):
 1. Core modules required for basic functionality
 2. Filesystem modules to read various filesystems containing kernel and initramfs images
 3. The lvm module for Logical Volume Management support
 The modules are embedded directly in the EFI binary to comply with Secure Boot requirements.
 
-Here's a list of some of the key modules:
-1. UEFI modules:
-	Modules for ARM systems with UEFI
-	Modules for ARM64 (AArch64) systems with UEFI
-	Modules for IA32 (32-bit x86) systems with UEFI
-	Modules for AMD64 (64-bit x86) systems with UEFI
-	Modules for RISC-V 64-bit systems with UEFI
-2. BIOS modules:
-	Modules for traditional BIOS systems
-3. Other architecture-specific modules:
-	Modules for Coreboot firmware
-4. Filesystem modules:
-	ext2/ext3/ext4
-	FAT12/FAT16/FAT32
-	exFAT
-	BtrFS (including RAID0, RAID1, RAID10, gzip and lzo compression)
-	ISO9660 (including Joliet and Rock-ridge extensions)
-	NTFS (including compression)
-	HFS and HFS+
-	UFS and UFS2
-5. Compression modules:
-	Support for reading compressed files
-6. Network modules:
-	Support for network booting
-7. Multiboot modules:
-	Support for loading multiple modules as specified in the Multiboot standard
-8. Environment modules:
-	Support for saving and loading environment variables
+We tried to analyze the grub2 binary with the help of “strings”, but because of the strings command that will only recognize strings 
+larger than 4 characters, I could not list all the modules. Finally I found the following information:
 
+Here's a list of some of the key Grub2 modules:
+acpi afsplitter all_video bitmap bitmap_scale boot btrfs bufio cat chain configfile 
+cpuid crypto cryptodisk datetime disk diskfilter echo efi_gop efinet efi_uga ext2 extcmd 
+fat font fshelp gcry_arcfour gcry_blowfish gcry_camellia gcry_cast5 gcry_crc gcry_des gcry_dsa 
+gcry_idea gcry_md4 gcry_md5 gcry_rfc2268 gcry_rijndael gcry_rmd160 gcry_rsa gcry_seed gcry_serpent 
+gcry_sha1 gcry_sha256 gcry_sha512 gcry_tiger gcry_twofish gcry_whirlpool gettext gfxmenu gfxterm 
+gfxterm_background gzio halt help hfsplus iso9660 jpeg keystatus linux linuxefi loadenv loopback 
+ls luks lvm lzopio mdraid09 mdraid1x mmap mpi net normal ntfs password_pbkdf2 pbkdf2 pgp png probe 
+procfs raid5rec raid6rec regexp relocator search search_fs_file search_fs_uuid search_label sleep 
+smbios squash4 terminal trig video video_bochs video_cirrus video_colors xfs xzio zfs zfscrypt 
+zfsinfo zstd cat fat ls lvm pgp png zfs
+
+Please note, this list may not include all modules.
 *******************************************************************************
 ### What is the origin and full version number of your bootloader (GRUB2 or other)?
 *******************************************************************************
@@ -343,4 +331,5 @@ Debian's 5.15.1 kernel includes several patches and features to enforce Secure B
 *******************************************************************************
 ### Add any additional information you think we may need to validate this shim.
 *******************************************************************************
-We use this SHIM to boot multiple bootloaders from distro vendor Canonical. This is because we modify kernel configs to apply additional device drivers and security controls which require rebuilding and re-signing.
+We use this SHIM to boot bootloaders from distro vendor Canonical. This is because we modify kernel configs to apply additional 
+device drivers and security controls which require rebuilding and re-signing.
