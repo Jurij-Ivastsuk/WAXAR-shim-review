@@ -246,9 +246,9 @@ The SBAT listing for GRUB2 from Canonical with the addition for waxar:
 
 ```
 sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SBAT.md
-grub,4,Free Software Foundation,grub,2.12~rc1,https://www.gnu.org/software/grub/
-grub.ubuntu,1,Ubuntu,grub2,2.12~rc1-10ubuntu4,https://www.ubuntu.com/.grub
-peimage,1,Canonical,grub2,2.12~rc1-10ubuntu4,https://salsa.debian.org/grub-team/grub/-/blob/master/debian/patches/secure-boot/efi-use-peimage-shim.patch
+grub,4,Free SoftwareFoundation,grub,2.12~rc1,https://www.gnu.org/software/grub/
+grub.ubuntu,1,Ubuntu,grub2,2.12~rc1-10ubuntu4,https://www.ubuntu.com/
+grub.peimage,1,Canonical,grub2,2.12~rc1-10ubuntu4,https://salsa.debian.org/grub-team/grub/-/blob/master/debian/patches/secure-boot/efi-use-peimage-shim.patch
 grub.waxar,1,Waxar GmbH & Co.KG,grub2,2.12~rc1-10ubuntu4,https://www.waxar.eu
 ```
 
