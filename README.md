@@ -90,7 +90,7 @@ N/A
 *******************************************************************************
 ### If shim is loading GRUB2 bootloader what exact implementation of Secureboot in GRUB2 do you have? (Either Upstream GRUB2 shim_lock verifier or Downstream RHEL/Fedora/Debian/Canonical-like implementation)
 *******************************************************************************
-We are using downstream implementations from Canonical
+We are using downstream implementations from Canonical v. 2.12-1ubuntu7.3
 
 *******************************************************************************
 ### If shim is loading GRUB2 bootloader and your previously released shim booted a version of GRUB2 affected by any of the CVEs in the July 2020, the March 2021, the June 7th 2022, the November 15th 2022, or 3rd of October 2023 GRUB2 CVE list, have fixes for all these CVEs been applied?
@@ -140,7 +140,8 @@ These CVEs are addreessed in the parent distros. We do not modify the source of 
 ### If these fixes have been applied, is the upstream global SBAT generation in your GRUB2 binary set to 4?
 The entry should look similar to: `grub,4,Free Software Foundation,grub,GRUB_UPSTREAM_VERSION,https://www.gnu.org/software/grub/`
 *******************************************************************************
-Yes: grub,4,Free Software Foundation,grub,2.12~rc1,https://www.gnu.org/software/grub/
+No, the upstream global SBAT generation in our GRUB2 binary is set to 5
+grub,5,Free Software Foundation,grub,2.12,https://www.gnu.org/software/grub/
 
 *******************************************************************************
 ### Were old shims hashes provided to Microsoft for verification and to be added to future DBX updates?
@@ -246,42 +247,21 @@ The SBAT listing for GRUB2 from Canonical with the addition for waxar:
 
 ```
 sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SBAT.md
-grub,4,Free SoftwareFoundation,grub,2.12~rc1,https://www.gnu.org/software/grub/
-grub.ubuntu,1,Ubuntu,grub2,2.12~rc1-10ubuntu4,https://www.ubuntu.com/
-grub.peimage,1,Canonical,grub2,2.12~rc1-10ubuntu4,https://salsa.debian.org/grub-team/grub/-/blob/master/debian/patches/secure-boot/efi-use-peimage-shim.patch
-grub.waxar,1,Waxar GmbH & Co.KG,grub2,2.12~rc1-10ubuntu4,https://www.waxar.eu
+grub,5,Free SoftwareFoundation,grub,2.12,https://www.gnu.org/software/grub/
+grub.ubuntu,2,Ubuntu,grub2,2.12-1ubuntu7.3,https://www.ubuntu.com/
+grub.peimage,2,Canonical,grub2,2.12-1ubuntu7.3,https://salsa.debian.org/grub-team/grub/-/blob/master/debian/patches/secure-boot/efi-use-peimage-shim.patch
+grub.waxar,1,Waxar GmbH & Co.KG,grub2,2.12-1ubuntu7.3,https://www.waxar.eu
 ```
 
 *******************************************************************************
 ### Which modules are built into your signed GRUB2 image?
 *******************************************************************************
 We use upstreams distro from Canonical for grub since we are not rebuilding it and the list remains obviously the same.
-Ubuntu's GRUB 2 version 2.12~rc1-10ubuntu4 includes the following modules built into its signed GRUB EFI binary (grubx64.efi):
-1. Core modules required for basic functionality
-2. Filesystem modules to read various filesystems containing kernel and initramfs images
-3. The lvm module for Logical Volume Management support
-The modules are embedded directly in the EFI binary to comply with Secure Boot requirements.
-
-We tried to analyze the grub2 binary with the help of “strings”, but because of the strings command that will only recognize strings 
-larger than 4 characters, I could not list all the modules. Finally I found the following information:
-
-Here's a list of some of the key Grub2 modules:
-acpi afsplitter all_video bitmap bitmap_scale boot btrfs bufio cat chain configfile 
-cpuid crypto cryptodisk datetime disk diskfilter echo efi_gop efinet efi_uga ext2 extcmd 
-fat font fshelp gcry_arcfour gcry_blowfish gcry_camellia gcry_cast5 gcry_crc gcry_des gcry_dsa 
-gcry_idea gcry_md4 gcry_md5 gcry_rfc2268 gcry_rijndael gcry_rmd160 gcry_rsa gcry_seed gcry_serpent 
-gcry_sha1 gcry_sha256 gcry_sha512 gcry_tiger gcry_twofish gcry_whirlpool gettext gfxmenu gfxterm 
-gfxterm_background gzio halt help hfsplus iso9660 jpeg keystatus linux linuxefi loadenv loopback 
-ls luks lvm lzopio mdraid09 mdraid1x mmap mpi net normal ntfs password_pbkdf2 pbkdf2 pgp png probe 
-procfs raid5rec raid6rec regexp relocator search search_fs_file search_fs_uuid search_label sleep 
-smbios squash4 terminal trig video video_bochs video_cirrus video_colors xfs xzio zfs zfscrypt 
-zfsinfo zstd cat fat ls lvm pgp png zfs
-
-Please note, this list may not include all modules.
+All modules are listet in file Grub2_Modules_Canonical_v_2_12.txt
 *******************************************************************************
 ### What is the origin and full version number of your bootloader (GRUB2 or other)?
 *******************************************************************************
-Ubuntu: grub2 - Version 2.12~rc1-10ubuntu4
+Ubuntu: grub2 - Version 2.12-1ubuntu7.3
 
 *******************************************************************************
 ### If your SHIM launches any other components, please provide further details on what is launched.

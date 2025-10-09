@@ -1,13 +1,13 @@
 Distributor ID:	Ubuntu
-Description:	Ubuntu 23.10
-Release:	23.10
-Codename:	mantic
+Description:	Ubuntu 24.04.3 LTS
+Release:	24.04
+Codename:	noble
 
 # Version
-grub_version="2.12~rc1"
+grub_version="2.12"
 grub_package="grub"
-grub_package_string="GRUB 2.12~rc1-10ubuntu4"
-grub_package_version="2.12~rc1-10ubuntu4"
+grub_package_string="GRUB 2.12-1ubuntu7.3"
+grub_package_version="2.12-1ubuntu7.3"
 grub_package_name="GRUB"
 grub_package_bugreport="bug-grub@gnu.org"
 
